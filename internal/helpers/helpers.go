@@ -25,7 +25,7 @@ func GetGlobalUsername() (string, error) {
 // Select licenses
 func Select(options []string) (string, error) {
 	prompt := promptui.Select{
-		Label:        "Select Day",
+		Label:        "Select a license: ",
 		Items:        options,
 		Size:         20,
 		HideSelected: true,
@@ -33,7 +33,3 @@ func Select(options []string) (string, error) {
 	_, result, err := prompt.Run()
 	return result, err
 }
-
-// Create content for the license
-
-// Write file

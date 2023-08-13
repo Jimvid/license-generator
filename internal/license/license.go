@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/jimvid/license-generator/internal/helpers"
 )
 
 type Licenses struct {
@@ -129,7 +131,11 @@ func (l *Licenses) WriteLicense(licenseContent LicenseContent) error {
 		return err
 	}
 
-	fmt.Println("\033[32m" + "✔ License created successfully!\n" + "\033[0m" + "Make sure to check the LICENSE and make changes accordingly")
+	fmt.Println(
+		helpers.TermColors.Green +
+			"✔ License created successfully!\n" +
+			helpers.TermColors.Reset + "Make sure to check the LICENSE and make changes accordingly \n",
+	)
 
 	return nil
 }

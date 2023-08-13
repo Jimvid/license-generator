@@ -2,10 +2,23 @@ package helpers
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/manifoldco/promptui"
 	"os/exec"
 	"strings"
 )
+
+// Colors used in the terminal
+type termColors struct {
+	Green, Yellow, Red, Reset string
+}
+
+var TermColors = termColors{
+	Green:  "\033[32m",
+	Yellow: "\033[33m",
+	Red:    "\033[31m",
+	Reset:  "\033[0m",
+}
 
 // Get username from global git if possible
 func GetGlobalUsername() (string, error) {
@@ -31,5 +44,6 @@ func Select(options []string) (string, error) {
 		HideSelected: true,
 	}
 	_, result, err := prompt.Run()
+	fmt.Print(TermColors.Green + "✔ " + result + "\n")
 	return result, err
 }

@@ -1,11 +1,11 @@
 package helpers
 
 import (
-	"bytes"
+	"errors"
 	"fmt"
 	"github.com/manifoldco/promptui"
-	"os/exec"
-	"strings"
+	"strconv"
+	"time"
 )
 
 // Colors used in the terminal
@@ -20,30 +20,74 @@ var TermColors = termColors{
 	Reset:  "\033[0m",
 }
 
-// Get username from global git if possible
-func GetGlobalUsername() (string, error) {
-	command := exec.Command("git", "config", "--global", "user.name")
-	var out bytes.Buffer
-	command.Stdout = &out
-
-	err := command.Run()
-
-	if err != nil {
-		return "", err
-	}
-
-	return strings.TrimSpace(out.String()), nil
-}
-
 // Select licenses
 func Select(options []string) (string, error) {
 	prompt := promptui.Select{
-		Label:        "Select a license: ",
+		Label:        "Choose a license",
 		Items:        options,
 		Size:         20,
 		HideSelected: true,
 	}
 	_, result, err := prompt.Run()
-	fmt.Print(TermColors.Green + "✔ " + result + "\n")
+
+	if err == nil {
+		fmt.Print(TermColors.Green + "✔ " + TermColors.Reset + result + "\n")
+	}
+
 	return result, err
+}
+
+func GetName() (string, error) {
+	prompt := promptui.Prompt{
+		Label:       "Enter name",
+		HideEntered: true,
+	}
+
+	result, err := prompt.Run()
+
+	if err == nil {
+		fmt.Printf(TermColors.Green + "✔ " + TermColors.Reset + result + "\n")
+	}
+
+	return result, err
+}
+
+func GetYear() (string, error) {
+
+	currentTime := time.Now()
+	currentYear := currentTime.Year()
+	currentYearAsString := strconv.Itoa(currentYear)
+
+	validate := func(input string) error {
+		// If nothing is provided return nil
+		if len(input) <= 0 {
+			return nil
+		}
+
+		// If we have some input, make sure its an int
+		_, err := strconv.ParseInt(input, 8, 64)
+		if err != nil {
+			return errors.New("✘ Invalid number")
+		}
+
+		return nil
+	}
+
+	prompt := promptui.Prompt{
+		Label:       "Enter year",
+		Validate:    validate,
+		HideEntered: true,
+	}
+
+	result, err := prompt.Run()
+
+	if err == nil {
+		if len(result) <= 0 {
+			fmt.Printf(TermColors.Green + "✔ " + TermColors.Reset + currentYearAsString + "\n")
+		} else {
+			fmt.Printf(TermColors.Green + "✔ " + TermColors.Reset + result + "\n")
+		}
+	}
+
+	return currentYearAsString, err
 }

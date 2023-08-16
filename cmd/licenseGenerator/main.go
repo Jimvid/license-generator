@@ -35,7 +35,7 @@ func main() {
 	// write license to file
 	err = l.WriteLicense(licenseContent)
 	if err != nil {
-		fmt.Println("Error selecting a license: ", err)
+		fmt.Println("Error writing license to file: ", err)
 		return
 	}
 }

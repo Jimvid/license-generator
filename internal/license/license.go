@@ -4,11 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/jimvid/license-generator/internal/helpers"
 	"net/http"
 	"os"
 	"strings"
-
-	"github.com/jimvid/license-generator/internal/helpers"
 )
 
 type Licenses struct {
@@ -103,8 +102,15 @@ func (l *Licenses) GetLicenseContent(name string) (LicenseContent, error) {
 
 // Write license to file
 func (l *Licenses) WriteLicense(licenseContent LicenseContent) error {
-	name := getName()
-	year := getYear()
+	name, err := helpers.GetName()
+	if err != nil {
+		return err
+	}
+
+	year, err := helpers.GetYear()
+	if err != nil {
+		return err
+	}
 
 	replacer := strings.NewReplacer(
 		"[year]", year,
@@ -133,17 +139,9 @@ func (l *Licenses) WriteLicense(licenseContent LicenseContent) error {
 
 	fmt.Println(
 		helpers.TermColors.Green +
-			"✔ License created successfully!\n" +
-			helpers.TermColors.Reset + "Make sure to check the LICENSE and make changes accordingly \n",
+			"✔ " + helpers.TermColors.Reset + "License created successfully!\n" +
+			helpers.TermColors.Reset + "Make sure to check the LICENSE and make changes accordingly if needed.\n",
 	)
 
 	return nil
-}
-
-func getName() string {
-	return "Victor Jimvid"
-}
-
-func getYear() string {
-	return "2023"
 }

@@ -11,13 +11,12 @@ builds:
       - windows
       - darwin
 brews:
-  - 
-    name: license-generator
+  - name: license-generator
     description: Create licenses easily from your terminal
     homepage: https://github.com/Jimvid/license-generator
     repository:
       owner: Jimvid
-      name: homebrew-license-generator
+      name: homebrew-jimvid
     commit_author:
       name: Jimvid
       email: victor@jimvid.com
@@ -34,15 +33,15 @@ archives:
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
     format_overrides:
-    - goos: windows
-      format: zip
+      - goos: windows
+        format: zip
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
 changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+      - "^docs:"
+      - "^test:"
